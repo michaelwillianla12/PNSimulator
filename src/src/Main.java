@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
 
@@ -9,7 +10,7 @@ public class Main {
     private static LinkedList<Transicoes> listaTransicoes;
     private static LinkedList<Arcos> listaArcos;
     private static LinkedList<Transicoes> transicoesHabilitadas;
-
+    private static ArrayList<String> statusRede = new ArrayList<String>();
     private static ArrayList somenteHabilitadas;
 
     //private static Scanner entrada = new Scanner(System.in);
@@ -21,6 +22,7 @@ public class Main {
     private static int lugares = 8;
     private static int transicoes = 5;
     private static int marcas[] = {2, 0, 2, 0, 5, 0, 0, 0}; // aqui mesmo tamanho da quantidade de lugares, mudar se for o caso
+    private static int z = 0;
 
     public static void main(String args[]) {
 
@@ -29,7 +31,9 @@ public class Main {
         listaArcos = new LinkedList<>();
         transicoesHabilitadas = new LinkedList<>();
         somenteHabilitadas = new ArrayList();
-
+        boolean sair = false, proximo = false;
+        String linha = "", status = "":
+        Scanner entrada = new Scanner(System.in);
 
         // adiciona instancias de lugares em uma lista encadeada
 
@@ -62,14 +66,48 @@ public class Main {
         listaArcos.add(new Arcos(listaTransicoes.get(4), listaLugares.get(1), 1, 'l'));
 
 
+        status = "Ciclo|";
+        
+        for(int i = 0; i < lugares.size(); i++)
+            status += "L" + ((i < 10) ? "0" : "") + String.valueOf(i) + "|";
+        
+        for(int i = 0; i < transicoes.size(); i++)
+            status += "T" + ((i < 10) ? "0" : "") + String.valueOf(i) + "|";
+        
+        statusRede.add(status);
 
         verificaStatusDaRede();
 
-        for (int i = 0; i < 8 ; i++) {
+        white(!sair) {
+            z++;
+
+            if(z % listaLugares.get(0).getTempo() == 0)
+                listaLugares.get(0).setMarca(listaLugares.get(0).getMarca() + 1);
 
             atualizaEstados();
 
+            System.out.println("");
+            
+            System.out.println("Pressione 'p' para próximo ciclo ou 's' para sair");
+            linha = entrada.nextLine();
+            
+            if(linha.length() == 1 && (linha.charAt(0) == 's' || linha.charAt(0) == 'S'))
+                sair = true;
+            else if(linha.length() == 1 && (linha.charAt(0) == 'p' || linha.charAt(0) == 'P'))
+                proximo = true;
+            
+            while(!sair && !proximo){
+                System.out.println("Pressione 'p' para próximo ciclo ou 's' para sair");
+                linha = entrada.nextLine();
+                
+                if(linha.length() == 1 && (linha.charAt(0) == 's' || linha.charAt(0) == 'S'))
+                    sair = true;
+                else if(linha.length() == 1 && (linha.charAt(0) == 'p' || linha.charAt(0) == 'P'))
+                    proximo = true;
+            }
         }
+
+        entrada.close();
 
         //entrada.nextLine();
         //keyPressed = KeyEvent.KEY_PRESSED;
@@ -110,14 +148,22 @@ public class Main {
 
                             listaLugares.get(listaArcos.get(j).getOrigem()).setMarca(listaLugares.get(listaArcos.get(j).getOrigem()).getMarca() - listaArcos.get(j).getPesoDoArco());
                             listaLugares.get(listaArcos.get(j).getOrigem()).setTransicoesHabilitadas(listaArcos.get(j).getDestino());
+
+                            if(listaLugares.get(listaArcos.get(j).getOrigem()).getId() != listaLugares.get(0).getId())
+                                if (listaLugares.get(listaArcos.get(j).getOrigem()).getMarca() == 0)
+                                    listaLugares.get(listaArcos.get(j).getOrigem()).setFimProcesso(-1);
                           //  System.out.println(listaLugares.get(listaArcos.get(j).getOrigem()).getId());
                         }
                     }
 
                     if (listaArcos.get(j).getTipoDestino() == 'l') {
 
-                        if (listaArcos.get(j).getOrigem() == transicoesHabilitadas.get(i).getId())
+                        if (listaArcos.get(j).getOrigem() == transicoesHabilitadas.get(i).getId()){
                             listaLugares.get(listaArcos.get(j).getDestino()).setMarca(listaLugares.get(listaArcos.get(j).getDestino()).getMarca() + listaArcos.get(j).getPesoDoArco());
+                            if(listaLugares.get(listaArcos.get(j).getDestino()).getId() != listaLugares.get(0).getId())
+                                if(listaLugares.get(listaArcos.get(j).getDestino()).getFimProcesso() == -1)
+                                    listaLugares.get(listaArcos.get(j).getDestino()).setFimProcesso(z + listaLugares.get(listaArcos.get(j).getDestino()).getTempo());
+                        }
 
                     }
 
@@ -134,12 +180,19 @@ public class Main {
 
     private static void verificaStatusDaRede() {
 
-        System.out.println("################# STATUS RDP ################");
+        String status = ((z < 10) ? "00" : "0") + String.valueOf(z) + "  |";
+        
+        for (int i = 0; i < lugares.size(); i++)
+            status += ((lugares.get(i).getMarca() < 10) ? "00" : "0") + String.valueOf(lugares.get(i).getMarca()) + "|";
 
-        //mostra na saida a quantidade de marcas em cada lugar
-        for (int i = 0; i < listaLugares.size(); i++)
-            System.out.println("Lugar " + i + " Qnt Marcas " + listaLugares.get(i).getMarca());
-
+        for (int i = 0; i < transicoes.size(); i++){
+            status += ((transicoes.get(i).isHabilitada()) ? "sim" : "nao") + "|";
+        }
+        
+        statusRede.add(status);
+        
+        for(int i = 0; i < statusRede.size(); i++)
+            System.out.println(statusRede.get(i)); 
 
         setHabilitada();
 
@@ -147,31 +200,37 @@ public class Main {
     }
 
     private static void setHabilitada() {
+        int cont;
 
         for (int i = 0; i < listaTransicoes.size(); i++) {
-
+            listaTransicoes.get(i).setHabilitada(false);
+            cont = 0;
 
             for (int j = 0; j < listaArcos.size(); j++) {
-
-
                 if (listaArcos.get(j).getTipoDestino() == 't') {
-
-                   // System.out.println("destino (transicoes)"+listaArcos.get(j).getDestino());
-
                     if(listaTransicoes.get(i).getId() == listaArcos.get(j).getDestino()) {
-
                         if (listaArcos.get(j).getPesoDoArco() <= listaLugares.get(listaArcos.get(j).getOrigem()).getMarca()) {
+                            if(listaLugares.get(listaArcos.get(j).getOrigem()).getFimProcesso() >= z){
+                                listaLugares.get(listaArcos.get(j).getOrigem()).setTransicoesHabilitadas(listaArcos.get(j).getDestino());
+                                listaTransicoes.get(i).setHabilitada(true);
+                                
+                                if(listaTransicoes.get(i).getLugares() > 1)
+                                    cont ++;
+                            }
+                        }   
+                    }
+                }
+            }
 
-                            listaLugares.get(listaArcos.get(j).getOrigem()).setTransicoesHabilitadas(listaArcos.get(j).getDestino());
-                            listaTransicoes.get(i).setHabilitada(true);
-
-                        } else{
-
-                            listaTransicoes.get(i).setHabilitada(false);
-
-                            if(i != listaTransicoes.size()-1){
-                                i++;
-                                j = 0;
+            if(listaTransicoes.get(i).getLugares() > 1 && cont != listaTransicoes.get(i).getLugares()){
+                listaTransicoes.get(i).setHabilitada(false);
+                for (int j = 0; j < listaArcos.size(); j++) {
+                    if (listaArcos.get(j).getTipoDestino() == 't') {
+                        if(listaTransicoes.get(i).getId() == listaArcos.get(j).getDestino()) {
+                            if (listaArcos.get(j).getPesoDoArco() <= listaLugares.get(listaArcos.get(j).getOrigem()).getMarca()) {
+                                if(listaLugares.get(listaArcos.get(j).getOrigem()).getFimProcesso() >= z){
+                                    listaLugares.get(listaArcos.get(j).getOrigem()).removeHabilitada(listaArcos.get(j).getDestino());
+                                }
                             }
                         }
                     }
@@ -179,7 +238,7 @@ public class Main {
             }
         }
     }
-
+    /*
     private static void transicoesHabilitadas() {
 
         // mostra na saída as transicoes habilitadas e nao habilitadas
@@ -196,7 +255,7 @@ public class Main {
 
         System.out.println();
     }
-
+    */
     private static int[] sorteiaTransicao(){
 
         ArrayList<Integer> temp = new ArrayList();
