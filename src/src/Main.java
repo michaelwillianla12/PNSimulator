@@ -27,20 +27,20 @@ public class Main {
         boolean sair = false, proximo = false;
         String linha = "", status = "";
         Scanner entrada = new Scanner(System.in);
+        int tempoLugares = 0;
 
 
         // adiciona instancias de lugares e suas marcas em uma lista encadeada
-        for (int i = 0; i < lugares; i++){
+        for (int i = 0; i < lugares; i++) {
 
-           //sorteia o tempo para cada lugar criado
-           //int tempo = (int) Math.random() * 21;
+            //sorteia o tempo para cada lugar criado tempo vai de 0 a 21
+            tempoLugares = (int) (Math.random() * 11);
+            System.out.println(tempoLugares);
 
-            //tempos pre fixados 4,5,6,7,8,9,10,11
-                listaLugares.add(new Lugares(i,i+1));
-            for (int j = 0; j < marcas[i]; j++) {
+            //adiciona lugares com marcas em uma lista encadeada
+            listaLugares.add(new Lugares(i, tempoLugares));
+            for (int j = 0; j < marcas[i]; j++)
                 listaLugares.get(i).setMarca(new Marca(0));
-
-            }
         }
 
         // adiciona instancias de transicoes em uma lista encadeada
@@ -70,22 +70,18 @@ public class Main {
 
         status = "Ciclo|";
 
-        for(int i = 0; i < listaLugares.size(); i++)
+        for (int i = 0; i < listaLugares.size(); i++)
             status += "L" + ((i < 10) ? "0" : "") + String.valueOf(i) + "|";
 
-        for(int i = 0; i < listaTransicoes.size(); i++)
+        for (int i = 0; i < listaTransicoes.size(); i++)
             status += "T" + ((i < 10) ? "0" : "") + String.valueOf(i) + "|";
 
         statusRede.add(status);
 
-
-        //verificaStatusDaRede();
-
-
         //laco da rede/interação com o usuário
-        while(!sair){
+        while (!sair) {
 
-            System.out.println("Tempo global: "+zTime);
+            System.out.println("Tempo global: " + zTime);
 
             setHabilitadaTransicao();
 
@@ -96,29 +92,27 @@ public class Main {
 
             //decrementa marcas se houver
             for (int i = 0; i < listaLugares.size(); i++) {
-                if(listaLugares.get(i).isRecebeuMarca() == true)
-                        listaLugares.get(i).decTempoMarcas();
+                if (listaLugares.get(i).isRecebeuMarca() == true)
+                    listaLugares.get(i).decTempoMarcas();
             }
-
-
 
             System.out.println("");
 
             System.out.println("Pressione 'p' para próximo ciclo ou 's' para sair");
             linha = entrada.nextLine();
 
-            if(linha.length() == 1 && (linha.charAt(0) == 's' || linha.charAt(0) == 'S'))
+            if (linha.length() == 1 && (linha.charAt(0) == 's' || linha.charAt(0) == 'S'))
                 sair = true;
-            else if(linha.length() == 1 && (linha.charAt(0) == 'p' || linha.charAt(0) == 'P'))
+            else if (linha.length() == 1 && (linha.charAt(0) == 'p' || linha.charAt(0) == 'P'))
                 proximo = true;
 
-            while(!sair && !proximo){
+            while (!sair && !proximo) {
                 System.out.println("Pressione 'p' para próximo ciclo ou 's' para sair");
                 linha = entrada.nextLine();
 
-                if(linha.length() == 1 && (linha.charAt(0) == 's' || linha.charAt(0) == 'S'))
+                if (linha.length() == 1 && (linha.charAt(0) == 's' || linha.charAt(0) == 'S'))
                     sair = true;
-                else if(linha.length() == 1 && (linha.charAt(0) == 'p' || linha.charAt(0) == 'P'))
+                else if (linha.length() == 1 && (linha.charAt(0) == 'p' || linha.charAt(0) == 'P'))
                     proximo = true;
             }
         }
@@ -130,28 +124,23 @@ public class Main {
     private static void atualizaEstados() {
 
         //  int sorteado = sorteia();
-       // int[] ramdom = new int[2];
+        // int[] ramdom = new int[2];
 
-       // ramdom = sorteiaTransicao();
+        // ramdom = sorteiaTransicao();
 
-       // System.out.println(ramdom[1]);
+        // System.out.println(ramdom[1]);
 
         // if(ramdom != -1)
         //   System.out.println(ramdom);
 
         for (int i = 0; i < transicoesHabilitadas.size(); i++) {
 
-
-            if(listaTransicoes.get(i).isHabilitada() == true) {
+            if (listaTransicoes.get(i).isHabilitada() == true) {
 
                 for (int j = 0; j < listaArcos.size(); j++) {
 
                     //verifica cada arco dirigido para uma transicao e consome marcas de quantidade dos pesos do arco
                     if (listaArcos.get(j).getTipoDestino() == 't') {
-
-                        // System.out.println(listaLugares.get(0));
-                        // System.out.println(listaLugares.get(listaArcos.get(j).getOrigem()).getId());
-
 
                         if (listaArcos.get(j).getDestino() == transicoesHabilitadas.get(i).getId()) {
 
@@ -172,18 +161,11 @@ public class Main {
 
                             }
                             zTime += listaLugares.get(listaArcos.get(j).getDestino()).getTempo();
-                           // System.out.println(listaLugares.get(listaArcos.get(j).getDestino()).getTempo());
-                          //  listaLugares.get(listaArcos.get(j).getDestino()).setMarca(listaLugares.get(listaArcos.get(j).getDestino()).getMarca() + listaArcos.get(j).getPesoDoArco());
                         }
                     }
-
                 }
 
-
-              // verificaStatusDaRede();
-
                 i = transicoesHabilitadas.size();
-
             }
         }
     }
@@ -195,20 +177,18 @@ public class Main {
         for (int i = 0; i < listaLugares.size(); i++)
             status += ((listaLugares.get(i).getQntMarcas() < 10) ? "00" : "0") + String.valueOf(listaLugares.get(i).getQntMarcas()) + "|";
 
-        for (int i = 0; i < listaTransicoes.size(); i++){
+        for (int i = 0; i < listaTransicoes.size(); i++) {
             status += ((listaTransicoes.get(i).isHabilitada()) ? "sim" : "nao") + "|";
         }
 
         statusRede.add(status);
 
-        for(int i = 0; i < statusRede.size(); i++)
+        for (int i = 0; i < statusRede.size(); i++)
             System.out.println(statusRede.get(i));
 
         setHabilitadaTransicao();
 
         System.out.println();
-
-        //transicoesHabilitadas();
     }
 
     //metodo que habilita ou desabilita transições
@@ -219,24 +199,20 @@ public class Main {
 
             for (int j = 0; j < listaArcos.size(); j++) {
 
-                //  System.out.println("lt"+listaArcos.get(j).getOrigem());
-
-
                 if (listaArcos.get(j).getTipoDestino() == 't') {
 
-
-                    if(listaTransicoes.get(i).getId() == listaArcos.get(j).getDestino()) {
+                    if (listaTransicoes.get(i).getId() == listaArcos.get(j).getDestino()) {
 
                         if ((listaArcos.get(j).getPesoDoArco() <= listaLugares.get(listaArcos.get(j).getOrigem()).getQntMarcas())) {
 
                             listaLugares.get(listaArcos.get(j).getOrigem()).setTransicoesHabilitadas(listaArcos.get(j).getDestino());
                             listaTransicoes.get(i).setHabilitada(true);
 
-                        } else{
+                        } else {
 
                             listaTransicoes.get(i).setHabilitada(false);
 
-                            if(i != listaTransicoes.size()-1){
+                            if (i != listaTransicoes.size() - 1) {
                                 i++;
                                 j = 0;
                             }
@@ -247,25 +223,7 @@ public class Main {
         }
     }
 
-    //mostra na tela transicoes habilitadas ou nao
-    /*private static void transicoesHabilitadas() {
-
-        // mostra na saída as transicoes habilitadas e nao habilitadas
-        for (int i = 0; i < listaTransicoes.size(); i++) {
-            if (listaTransicoes.get(i).isHabilitada()) {
-                // transicoesHabilitadas.add(listaTransicoes.get(i));
-
-                System.out.println("Transição " + listaTransicoes.get(i).getId() + " está habilitada");
-            } else {
-
-                System.out.println("Transição " + listaTransicoes.get(i).getId() + " não está habilitada");
-            }
-        }
-
-        System.out.println();
-    }*/
-
-    private static int[] sorteiaTransicao(){
+    private static int[] sorteiaTransicao() {
 
         ArrayList<Integer> temp = new ArrayList();
         Random r = new Random();
@@ -275,10 +233,10 @@ public class Main {
         for (int i = 0; i < listaLugares.size(); i++) {
 
 
-            if(listaLugares.get(i).getTransicoesHabilitadas().size() > 1) {
+            if (listaLugares.get(i).getTransicoesHabilitadas().size() > 1) {
                 temp.addAll(listaLugares.get(i).getTransicoesHabilitadas());
 
-                sorteado [1] = listaLugares.get(i).getId();
+                sorteado[1] = listaLugares.get(i).getId();
 
             }
             // depois de sortear reseta o array de transicoes habilitadas para nao duplicar informacao
@@ -286,9 +244,9 @@ public class Main {
 
         }
 
-        if(temp.size() > 0) {
+        if (temp.size() > 0) {
             sorteado[0] = temp.get(r.nextInt(temp.size()));
-        }else
+        } else
             sorteado[0] = -1;
 
         return sorteado;

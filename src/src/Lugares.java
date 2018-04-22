@@ -86,12 +86,9 @@ public class Lugares {
     public void decTempoMarcas(){
 
         for (int i = 0; i <marcas.size() ; i++) {
-            System.out.println("Lugar "+this.getId());
-            System.out.println("Marca numero "+marcas.get(i).getId());
-            System.out.println("Antes de decrem"+marcas.get(i).getTempo());
+
             if(marcas.get(i).getTempo() > 0)
             marcas.get(i).decTempo();
-            System.out.println("Depois de decrem"+marcas.get(i).getTempo());
 
         }
 
