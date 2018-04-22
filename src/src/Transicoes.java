@@ -1,6 +1,6 @@
 public class Transicoes {
 
-    private int id, lugares;
+    private int id;
     private boolean habilitada = false;
 
 
@@ -8,7 +8,6 @@ public class Transicoes {
 
 
         this.id = id;
-        this.lugares = 1;
 
     }
 
@@ -28,14 +27,6 @@ public class Transicoes {
 
     public void setHabilitada(boolean habilitada) {
         this.habilitada = habilitada;
-    }
-
-    public int getLugares() {
-        return lugares;
-    }
-
-    public void setLugares(int lugares) {
-        this.lugares = lugares;
     }
 
 }
