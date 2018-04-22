@@ -4,7 +4,7 @@ public class Marca {
     private int tempo;
 
 
-    public Marca(int tempo){
+    public Marca(int tempo) {
 
         this.tempo = tempo;
 
@@ -28,7 +28,7 @@ public class Marca {
         this.tempo = tempo;
     }
 
-    public void decTempo(){
+    public void decTempo() {
         tempo--;
     }
 

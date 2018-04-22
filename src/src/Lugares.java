@@ -9,7 +9,7 @@ public class Lugares {
     private ArrayList<Marca> marcas = new ArrayList<>();
     private boolean recebeuMarca;
 
-    public Lugares(int id, int tempo){
+    public Lugares(int id, int tempo) {
 
         super();
         this.id = id;
@@ -22,11 +22,11 @@ public class Lugares {
     }
 
     public void setTransicoesHabilitadas(int transicaoHabilitada) {
-        if(!transicoesHabilitadas.contains(transicaoHabilitada))
+        if (!transicoesHabilitadas.contains(transicaoHabilitada))
             this.transicoesHabilitadas.add(transicaoHabilitada);
     }
 
-    public void resetTH(){
+    public void resetTH() {
 
         transicoesHabilitadas.clear();
 
@@ -45,7 +45,7 @@ public class Lugares {
         for (int i = 0; i < qnt; i++)
             marcas.remove(marcas.get(0));
 
-        if(marcas.size() == 0)
+        if (marcas.size() == 0)
             setRecebeuMarca(false);
     }
 
@@ -58,9 +58,9 @@ public class Lugares {
 
         int qntMarcas = 0;
 
-        for (int i = 0; i <marcas.size() ; i++) {
-            if(marcas.get(i).getTempo() == 0)
-            qntMarcas ++;
+        for (int i = 0; i < marcas.size(); i++) {
+            if (marcas.get(i).getTempo() == 0)
+                qntMarcas++;
 
         }
         return qntMarcas;
@@ -83,12 +83,12 @@ public class Lugares {
     }
 
     //decrementa tempo de todas as marcas de um lugar
-    public void decTempoMarcas(){
+    public void decTempoMarcas() {
 
-        for (int i = 0; i <marcas.size() ; i++) {
+        for (int i = 0; i < marcas.size(); i++) {
 
-            if(marcas.get(i).getTempo() > 0)
-            marcas.get(i).decTempo();
+            if (marcas.get(i).getTempo() > 0)
+                marcas.get(i).decTempo();
 
         }
 

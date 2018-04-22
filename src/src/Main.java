@@ -13,7 +13,6 @@ public class Main {
     private static int zTime = 0; //tempo global
 
     // Configure aqui a quantidade de lugares, transiçoes e a quantidade de marcas na mesma ordem dos lugares
-
     private static int lugares = 8;
     private static int transicoes = 5;
     private static int marcas[] = {2, 0, 2, 0, 5, 0, 0, 0}; // aqui um vetor de mesmo tamanho da quantidade de lugares existentes
@@ -35,7 +34,6 @@ public class Main {
 
             //sorteia o tempo para cada lugar criado tempo vai de 0 a 21
             tempoLugares = (int) (Math.random() * 11);
-            System.out.println(tempoLugares);
 
             //adiciona lugares com marcas em uma lista encadeada
             listaLugares.add(new Lugares(i, tempoLugares));
@@ -123,17 +121,16 @@ public class Main {
     //metodo que atualiza a rede, retira ou insere marcas em lugares
     private static void atualizaEstados() {
 
-        //  int sorteado = sorteia();
-        // int[] ramdom = new int[2];
+        ArrayList<Integer> random;
 
-        // ramdom = sorteiaTransicao();
-
-        // System.out.println(ramdom[1]);
-
-        // if(ramdom != -1)
-        //   System.out.println(ramdom);
+        random = sorteiaTransicao();
 
         for (int i = 0; i < transicoesHabilitadas.size(); i++) {
+
+            for (int j = 0; j < random.size(); j++) {
+                if (transicoesHabilitadas.get(i).getId() != random.get(0))
+                    i++;
+            }
 
             if (listaTransicoes.get(i).isHabilitada() == true) {
 
@@ -223,32 +220,28 @@ public class Main {
         }
     }
 
-    private static int[] sorteiaTransicao() {
+    private static ArrayList sorteiaTransicao() {
 
-        ArrayList<Integer> temp = new ArrayList();
+        ArrayList<Integer> temp = new ArrayList<>();
         Random r = new Random();
 
-        int[] sorteado = new int[2];
+        int sorteado;
 
         for (int i = 0; i < listaLugares.size(); i++) {
 
-
-            if (listaLugares.get(i).getTransicoesHabilitadas().size() > 1) {
+            if (listaLugares.get(i).getTransicoesHabilitadas().size() > 1)
                 temp.addAll(listaLugares.get(i).getTransicoesHabilitadas());
 
-                sorteado[1] = listaLugares.get(i).getId();
-
-            }
             // depois de sortear reseta o array de transicoes habilitadas para nao duplicar informacao
             listaLugares.get(i).resetTH();
 
         }
 
-        if (temp.size() > 0) {
-            sorteado[0] = temp.get(r.nextInt(temp.size()));
-        } else
-            sorteado[0] = -1;
+        //sorteia qual transicao vai retirar marcas de um mesmo lugar
+        if (temp.size() > 0)
+            Collections.shuffle(temp);
 
-        return sorteado;
+
+        return temp;
     }
 }

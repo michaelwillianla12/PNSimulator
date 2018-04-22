@@ -1,14 +1,13 @@
 public class Arcos {
 
 
-
     private int origem;
     private int destino;
     private int pesoDoArco;
     private char tipoDestino;
 
 
-    public Arcos(Lugares origem, Transicoes destino, int pesoDoArco, char tipoDestino){
+    public Arcos(Lugares origem, Transicoes destino, int pesoDoArco, char tipoDestino) {
 
         this.origem = origem.getId();
         this.destino = destino.getId();
@@ -17,7 +16,7 @@ public class Arcos {
 
     }
 
-    public Arcos(Transicoes origem, Lugares destino, int pesoDoArco, char tipoDestino){
+    public Arcos(Transicoes origem, Lugares destino, int pesoDoArco, char tipoDestino) {
 
         this.origem = origem.getId();
         this.destino = destino.getId();
@@ -58,9 +57,6 @@ public class Arcos {
     public void setTipoDestino(char tipoDestino) {
         this.tipoDestino = tipoDestino;
     }
-
-
-
 
 
 }

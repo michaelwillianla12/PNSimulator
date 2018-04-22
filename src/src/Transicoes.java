@@ -4,7 +4,7 @@ public class Transicoes {
     private boolean habilitada = false;
 
 
-    public Transicoes(int id){
+    public Transicoes(int id) {
 
 
         this.id = id;
